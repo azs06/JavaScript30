@@ -43,6 +43,7 @@
         return months[dateObj.getMonth()];
      
     }
+    
     function getHours(dateObj) {
         var hours = dateObj.getHours();
         hours = hours % 12;
@@ -50,23 +51,31 @@
         var ampm = hours >= 12 ? 'PM' : 'AM';
         return hours + " " + ampm;
     }
+    function returnWithZero(value){
+        return value < 10 ? "0"+value : value;
+    }
+    
     function updateTime() {
         var now = today();
-        secondsElm.querySelector('span').innerHTML = now.getSeconds();
+        secondsElm.querySelector('span').innerHTML = returnWithZero(now.getSeconds());
         changeBackgroundColor(secondsElm, getRandomColor());
         
         if(now.getSeconds() >= 59){
-            minuteElm.querySelector('span').innerHTML = now.getMinutes();         
+            minuteElm.querySelector('span').innerHTML = now.getMinutes();
+            changeBackgroundColor(minuteElm, getRandomColor());
         }
         if(now.getMinutes() >= 59){
             hourlElm.querySelector('span').innerHTML = getHours(now);
+            changeBackgroundColor(hourlElm, getRandomColor());
         }
+        
     }
+    
     function initTime() {
         var now = today();
         var dayString = "Today is " + getDay(now) + ", "+ getMonth(now) + ", " + now.getFullYear();
-        secondsElm.querySelector('span').innerHTML = now.getSeconds();
-        minuteElm.querySelector('span').innerHTML = now.getMinutes();
+        secondsElm.querySelector('span').innerHTML = returnWithZero(now.getSeconds());
+        minuteElm.querySelector('span').innerHTML = returnWithZero(now.getMinutes());
         hourlElm.querySelector('span').innerHTML = getHours(now);
         dayElm.querySelector('span').innerHTML = dayString;
     }
