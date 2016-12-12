@@ -1,17 +1,11 @@
 (function () {
     'use strict';
-    var id = null;
-    var timer = null;
-    var blockTimer = null;
-    var classes = document.getElementsByClassName('coloredBlock');
-    var classesArray = Array.from(classes);
-    var classesArrayLength = classesArray.length;
-    var blockInterval = 1000;
-    var rootInterval = classesArrayLength * blockInterval;
-    var today = function() {
-        return new Date();
-    };
-    var dayElm = document.getElementById('day'),
+    var classes = document.getElementsByClassName('coloredBlock'),
+        blockInterval = 1000,
+        today = function() {
+            return new Date();
+        },
+        dayElm = document.getElementById('day'),
         hourlElm = document.getElementById('hour'),
         minuteElm = document.getElementById('minutes'),
         secondsElm = document.getElementById('seconds');
@@ -21,28 +15,6 @@
         var green = Math.floor(Math.random() * 256);
         var black = Math.floor(Math.random() * 256);		
         return 'rgb(' + red + ', ' + green + ', ' + black + ')';	
-    }
-
-
-    function animation() {
-        loopAndChangeColor(0);
-        timer = setTimeout(function () {
-        id = requestAnimationFrame(animation);  
-        }, rootInterval);
-    }
-
-
-    function start_animation() {
-        //start the first frame
-        id = requestAnimationFrame(animation);
-    }
-
-
-    function cancel_animation() {
-        //cancel the latest frame.
-        clearTimeout(blockTimer);
-        clearTimeout(timer);
-        cancelAnimationFrame(id);
     }
 
 
@@ -59,33 +31,24 @@
         element.style.backgroundColor = color;
     }
 
-
-    function loopAndChangeColor(i){
-          i = i || 0;	
-          blockTimer = setTimeout(function () {   
-          changeBackgroundColor(classesArray[i], getRandomColor());
-          i++;
-          if ( i < classesArrayLength ) loopAndChangeColor(i);    
-       }, blockInterval)
-    }
-    
-    function setSeconds(){
-        var now = today();
-        secondsElm.innerHTML = now.getSeconds();
-    }
-    
-    function setMinutes() {
-        var now = today();
-        minuteElm.innerHTML = now.getMinutes();
-    }
-    function getDay(datObj){
+    /*@requires a date object as parameter*/
+    function getDay(dateObj){
         var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+        return days[dateObj.getDay()];
         
     }
-    
+    /*@requires a date object as parameter*/
     function getMonth(dateObj) {
         var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+        return months[dateObj.getMonth()];
      
+    }
+    function getHours(dateObj) {
+        var hours = dateObj.getHours();
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        var ampm = hours >= 12 ? 'PM' : 'AM';
+        return hours + " " + ampm;
     }
     function updateTime() {
         var now = today();
@@ -96,15 +59,16 @@
             minuteElm.querySelector('span').innerHTML = now.getMinutes();         
         }
         if(now.getMinutes() >= 59){
-            hourlElm.querySelector('span').innerHTML = now.getHours();
+            hourlElm.querySelector('span').innerHTML = getHours(now);
         }
     }
     function initTime() {
         var now = today();
-        console.log(hourlElm);
+        var dayString = "Today is " + getDay(now) + ", "+ getMonth(now) + ", " + now.getFullYear();
         secondsElm.querySelector('span').innerHTML = now.getSeconds();
         minuteElm.querySelector('span').innerHTML = now.getMinutes();
-        hourlElm.querySelector('span').innerHTML = now.getHours();
+        hourlElm.querySelector('span').innerHTML = getHours(now);
+        dayElm.querySelector('span').innerHTML = dayString;
     }
    
     setInterval(function(){
@@ -113,5 +77,4 @@
 
     changeBlockColor();
     initTime();
-    //start_animation();
 }());

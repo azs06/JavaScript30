@@ -8,6 +8,7 @@ section div{
 	align-items : center;
 	justify-content: center;
 	transition: background-color 0.5s;
+    flex-direction: column;
 }
 
 section{
@@ -18,5 +19,10 @@ section{
 section div span{
 	font-size: 28px;
 	font-weight: bold;
-	color: #000;
+	color: #fff;
+    text-shadow: 1px 1px 2px #000;
+}
+section h2{
+    color: #fff;
+    
 }
