@@ -1,0 +1,22 @@
+body{
+    overflow-x: hidden;
+}
+section div{
+	width: 50%;
+	border: 1px solid #ccc;
+	display: flex;
+	align-items : center;
+	justify-content: center;
+	transition: background-color 0.5s;
+}
+
+section{
+	display: flex;
+	height: 50vh;
+	width: 100vw;
+}
+section div span{
+	font-size: 28px;
+	font-weight: bold;
+	color: #000;
+}
