@@ -6,7 +6,7 @@
             return new Date();
         },
         dayElm = document.getElementById('day'),
-        hourlElm = document.getElementById('hour'),
+        hourElm = document.getElementById('hour'),
         minuteElm = document.getElementById('minutes'),
         secondsElm = document.getElementById('seconds');
 
@@ -62,7 +62,7 @@
         secondsElm.querySelector('span').innerHTML = returnWithZero(now.getSeconds());
         changeBackgroundColor(secondsElm, getRandomColor());
         minuteElm.querySelector('span').innerHTML = returnWithZero(now.getMinutes());
-        hourlElm.querySelector('span').innerHTML = getHours(now);
+        hourElm.querySelector('span').innerHTML = getHours(now);
         
         if(now.getMinutes() > mHolder){
             changeBackgroundColor(minuteElm, getRandomColor());
@@ -84,7 +84,7 @@
         hHolder = now.getHours();
         secondsElm.querySelector('span').innerHTML = returnWithZero(now.getSeconds());
         minuteElm.querySelector('span').innerHTML = returnWithZero(now.getMinutes());
-        hourlElm.querySelector('span').innerHTML = getHours(now);
+        hourElm.querySelector('span').innerHTML = getHours(now);
         dayElm.querySelector('span').innerHTML = dayString;
     }
    
