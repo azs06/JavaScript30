@@ -33,40 +33,46 @@
 
     /*@requires a date object as parameter*/
     function getDay(dateObj){
-        var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+        var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
         return days[dateObj.getDay()];
         
     }
     /*@requires a date object as parameter*/
     function getMonth(dateObj) {
-        var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+        var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         return months[dateObj.getMonth()];
      
     }
     
     function getHours(dateObj) {
         var hours = dateObj.getHours();
+        var ampm = hours >= 12 ? 'PM' : 'AM';
         hours = hours % 12;
         hours = hours ? hours : 12;
-        var ampm = hours >= 12 ? 'PM' : 'AM';
         return hours + " " + ampm;
     }
     function returnWithZero(value){
         return value < 10 ? "0"+value : value;
     }
+    var mHolder = 0,
+        hHolder = 0;
     
     function updateTime() {
         var now = today();
         secondsElm.querySelector('span').innerHTML = returnWithZero(now.getSeconds());
         changeBackgroundColor(secondsElm, getRandomColor());
+        minuteElm.querySelector('span').innerHTML = returnWithZero(now.getMinutes());
+        hourlElm.querySelector('span').innerHTML = getHours(now);
         
-        if(now.getSeconds() >= 59){
-            minuteElm.querySelector('span').innerHTML = now.getMinutes();
+        if(now.getMinutes() > mHolder){
             changeBackgroundColor(minuteElm, getRandomColor());
+            mHolder = now.getMinutes();            
+            
         }
-        if(now.getMinutes() >= 59){
-            hourlElm.querySelector('span').innerHTML = getHours(now);
-            changeBackgroundColor(hourlElm, getRandomColor());
+        
+        if(now.getHours() > hHolder){
+            changeBackgroundColor(hourElm, getRandomColor());
+            hHolder = now.getHours();
         }
         
     }
@@ -74,6 +80,8 @@
     function initTime() {
         var now = today();
         var dayString = "Today is " + getDay(now) + ", "+ getMonth(now) + ", " + now.getFullYear();
+        mHolder = now.getMinutes();
+        hHolder = now.getHours();
         secondsElm.querySelector('span').innerHTML = returnWithZero(now.getSeconds());
         minuteElm.querySelector('span').innerHTML = returnWithZero(now.getMinutes());
         hourlElm.querySelector('span').innerHTML = getHours(now);
@@ -82,7 +90,7 @@
    
     setInterval(function(){
         updateTime();
-    },1000);
+    },500);
 
     changeBlockColor();
     initTime();
