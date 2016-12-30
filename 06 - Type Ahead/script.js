@@ -36,7 +36,7 @@
             const regex = new RegExp(this.value, 'gi');
             const cityName = place.city.replace(regex, `<span class="hl">${place.city}</span>`);
             const stateName = place.state.replace(regex, `<span class="hl">${place.state}</span>`);
-            return `<li>
+            return `<li data-city="${place.city}" data-state="${place.state}">
                     <span class="name"> ${cityName}, ${stateName} </span>   
                     <span class="polpulation"> ${numberWithCommas(place.population)} </span>    
                     </li>`;
