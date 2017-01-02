@@ -1,0 +1,30 @@
+{
+  "name": "collabrative-drawing-app",
+  "version": "1.0.0",
+  "description": "a collabrative painting app with socket.io",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/azs06/JavaScript30.git"
+  },
+  "keywords": [
+    "html5",
+    "canvas",
+    "socket.io"
+  ],
+  "author": "Md. Atiquzzaman Soikat <atik.aiub@gmail.com> (<atik.aiub@gmail.com>)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/azs06/JavaScript30/issues"
+  },
+  "homepage": "https://github.com/azs06/JavaScript30#readme",
+  "devDependencies": {
+    "express": "^4.14.0"
+  },
+  "dependencies": {
+    "socket.io": "^1.7.2"
+  }
+}

@@ -18,8 +18,10 @@
 </div>
 <canvas id="draw" width="800" height="800"></canvas>	
 </section>
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script>
 	const canvas = document.getElementById('draw');
+	let socekt;
 	
 	/*controls*/
 	const controls = document.querySelector('.controls');
@@ -60,6 +62,10 @@
 		ctx.lineTo(e.offsetX, e.offsetY);
 		ctx.stroke();
 		[lastX, lastY] = [e.offsetX, e.offsetY];
+		socekt.emit('mouse',{
+			x: lastX,
+			y: lastY
+		})
 //		hue++;
 //		if(hue >= 360){
 //			hue = 0;
@@ -76,13 +82,30 @@
 //			ctx.lineWidth--;
 //		}
 	}
+	function newDraw(data){
+		console.log(lastX, lastY);
+		ctx.beginPath();
+		ctx.moveTo(lastX, lastY);
+		ctx.lineTo(data.x, data.y);
+		ctx.stroke();
+		[lastX, lastY] = [data.x, data.y];
+	}
 	
 	function updateCanvasSettings(){
 		ctx.lineWidth = pencilSize.value;
 		ctx.strokeStyle = pencilColor.value;
 	}
+	function isCanvasBlank(canvas) {
+		const blank = document.createElement('canvas');
+		
+		blank.width = canvas.width;
+		blank.height = canvas.height;
+
+		return canvas.toDataURL() == blank.toDataURL();
+	}
 	
 	window.onload = function(){
+		socekt = io.connect(window.location.host);
 		canvas.addEventListener('mousemove',draw);
 		canvas.addEventListener('mousedown',(e) => {
 			isDrawing = true;
@@ -93,9 +116,14 @@
 		pencilColor.addEventListener('change',updateCanvasSettings);
 		pencilSize.addEventListener('change', updateCanvasSettings);
 		clearBtn.addEventListener('click', function(){
+			if(isCanvasBlank(canvas)) return;
 			ctx.setTransform(1, 0, 0, 1, 0, 0);
 			ctx.clearRect(0,0, canvas.width, canvas.height);
-		})
+		});
+		socekt.on('mouse', function(data){
+			[lastX, lastY] = [data.x, data.y];			
+		});
+		socekt.on('mouse', newDraw);
 	};
 </script>
 
