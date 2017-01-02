@@ -5,18 +5,39 @@
   <title>HTML5 Canvas</title>
 </head>
 <body>
-<canvas id="draw" width="800" height="800"></canvas>
+<section class="main-content">
+<div class="controls">
+	<label for="input__color">Pencil Color:</label>
+	<input id="input__color" class="input__color" type="color" value="#bada55">
+	
+	<label for="input__size">Pencil size:</label>
+	<input id="input__size" class="input__size" type="range" min="1" max="100" value="10">
+	
+	<input class="input__clear" type="button" value="clear">
+	
+</div>
+<canvas id="draw" width="800" height="800"></canvas>	
+</section>
 <script>
 	const canvas = document.getElementById('draw');
-	canvas.height = window.innerHeight;
-	canvas.width = window.innerWidth;
 	
+	/*controls*/
+	const controls = document.querySelector('.controls');
+	const pencilColor = document.querySelector('.input__color');
+	const pencilSize = document.querySelector('.input__size');
+	const clearBtn = document.querySelector('.input__clear');
 	
+	/*canvas height and width*/
+	canvas.height = (window.innerHeight - ( 5 + controls.offsetHeight));
+	canvas.width = (window.innerWidth - 5);
+		
 	const ctx = canvas.getContext('2d');
 	ctx.lineJoin = 'round';
 	ctx.lineCap = 'round';
-	ctx.lineWidth = 50;
-	ctx.strokeStyle = "#BADA55";
+	ctx.lineWidth = pencilSize.value;
+	ctx.strokeStyle = pencilColor.value;
+	
+
 	
 	let isDrawing = false;
 	let lastX = 0;
@@ -24,41 +45,58 @@
 	let hue = 0;
 	let direction = true;
 	
+	function setCanvas(){
+
+	}
+	
 	function draw(e){
 		
 		if(!isDrawing) return;
 		
-		console.log(e);
-		ctx.strokeStyle = `hsl(${hue},100%,50%)`;
+
+		//ctx.strokeStyle = `hsl(${hue},100%,50%)`;
 		ctx.beginPath();
 		ctx.moveTo(lastX, lastY);
 		ctx.lineTo(e.offsetX, e.offsetY);
 		ctx.stroke();
 		[lastX, lastY] = [e.offsetX, e.offsetY];
-		hue++;
-		if(hue >= 360){
-			hue = 0;
-		}
-		
-		if(ctx.lineWidth >=100 || ctx.lineWidth <= 10){
-			direction = !direction;
-		}
-		if(direction){
-			//ctx.lineWidth = ctx.lineWidth + 5;
-			ctx.lineWidth++;
-		}else{
-			//ctx.lineWidth = ctx.lineWidth - 5;
-			ctx.lineWidth--;
-		}
+//		hue++;
+//		if(hue >= 360){
+//			hue = 0;
+//		}
+//		
+//		if(ctx.lineWidth >=100 || ctx.lineWidth <= 10){
+//			direction = !direction;
+//		}
+//		if(direction){
+//			//ctx.lineWidth = ctx.lineWidth + 5;
+//			ctx.lineWidth++;
+//		}else{
+//			//ctx.lineWidth = ctx.lineWidth - 5;
+//			ctx.lineWidth--;
+//		}
 	}
 	
-	canvas.addEventListener('mousemove',draw);
-	canvas.addEventListener('mousedown',(e) => {
-		isDrawing = true;
-		[lastX, lastY] = [e.offsetX, e.offsetY];
-	});
-	canvas.addEventListener('mouseup',() => isDrawing = false);
-	canvas.addEventListener('mouseout',() => isDrawing = false);
+	function updateCanvasSettings(){
+		ctx.lineWidth = pencilSize.value;
+		ctx.strokeStyle = pencilColor.value;
+	}
+	
+	window.onload = function(){
+		canvas.addEventListener('mousemove',draw);
+		canvas.addEventListener('mousedown',(e) => {
+			isDrawing = true;
+			[lastX, lastY] = [e.offsetX, e.offsetY];
+		});
+		canvas.addEventListener('mouseup',() => isDrawing = false);
+		canvas.addEventListener('mouseout',() => isDrawing = false);
+		pencilColor.addEventListener('change',updateCanvasSettings);
+		pencilSize.addEventListener('change', updateCanvasSettings);
+		clearBtn.addEventListener('click', function(){
+			ctx.setTransform(1, 0, 0, 1, 0, 0);
+			ctx.clearRect(0,0, canvas.width, canvas.height);
+		})
+	};
 </script>
 
 <style>
@@ -66,6 +104,31 @@
     margin:0;
 	overflow-x: hidden;
   }
+	.main-content{
+		border: 5px solid #2c3e50;
+	}
+	.controls{
+		border-bottom: 1px solid #607D8B;
+		height: 30px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 5px 0;
+	}
+	.controls input {
+		margin-right: 10px;
+	}
+	.controls input:last-child{
+		margin-right: 0;
+	}
+	.controls .input__clear{
+		padding: 5px 20px;
+		border: 1px solid #ffeeee;
+		box-shadow: 0 0 1px 1px #9E9E9E;
+	}
+	.controls label {
+		padding-right: 5px;
+	}
 </style>
 
 </body>
