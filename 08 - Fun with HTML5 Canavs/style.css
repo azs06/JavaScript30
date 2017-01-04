@@ -1,0 +1,29 @@
+html, body {
+    margin:0;
+	overflow-x: hidden;
+  }
+	.main-content{
+		border: 5px solid #2c3e50;
+	}
+	.controls{
+		border-bottom: 1px solid #607D8B;
+		height: 30px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 5px 0;
+	}
+	.controls input {
+		margin-right: 10px;
+	}
+	.controls input:last-child{
+		margin-right: 0;
+	}
+	.controls .input__clear{
+		padding: 5px 20px;
+		border: 1px solid #ffeeee;
+		box-shadow: 0 0 1px 1px #9E9E9E;
+	}
+	.controls label {
+		padding-right: 5px;
+	}
