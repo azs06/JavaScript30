@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<section class="main-content">
+<div class="controls">
+	<label for="input__color">Pencil Color:</label>
+	<input id="input__color" class="input__color" type="color" value="#bada55">
+	
+	<label for="input__size">Pencil size:</label>
+	<input id="input__size" class="input__size" type="range" min="1" max="100" value="10">
+	
+	<input class="input__clear" type="button" value="clear">
+	
+</div>
+<canvas id="draw" width="800" height="800"></canvas>	
+</section>
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
