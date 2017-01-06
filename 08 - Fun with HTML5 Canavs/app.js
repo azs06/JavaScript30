@@ -1,5 +1,7 @@
+	(function(){
+		
 	const canvas = document.getElementById('draw');
-	let socekt;
+	let socket;
 	
 	/*controls*/
 	const controls = document.querySelector('.controls');
@@ -17,51 +19,23 @@
 	ctx.lineWidth = pencilSize.value;
 	ctx.strokeStyle = pencilColor.value;
 	
-
-	
 	let isDrawing = false;
 	let lastX = 0;
 	let lastY = 0;
 	let hue = 0;
 	let direction = true;
 	
-	function setCanvas(){
-
-	}
 	
 	function draw(e){
-		
 		if(!isDrawing) return;
-		
-
-		//ctx.strokeStyle = `hsl(${hue},100%,50%)`;
 		ctx.beginPath();
 		ctx.moveTo(lastX, lastY);
 		ctx.lineTo(e.offsetX, e.offsetY);
 		ctx.stroke();
 		[lastX, lastY] = [e.offsetX, e.offsetY];
-//		socekt.emit('mouse',{
-//			x: lastX,
-//			y: lastY
-//		})
-//		hue++;
-//		if(hue >= 360){
-//			hue = 0;
-//		}
-//		
-//		if(ctx.lineWidth >=100 || ctx.lineWidth <= 10){
-//			direction = !direction;
-//		}
-//		if(direction){
-//			//ctx.lineWidth = ctx.lineWidth + 5;
-//			ctx.lineWidth++;
-//		}else{
-//			//ctx.lineWidth = ctx.lineWidth - 5;
-//			ctx.lineWidth--;
-//		}
 	}
-	function newDraw(data){
-		console.log(lastX, lastY);
+
+	function newDraw(data){	
 		ctx.beginPath();
 		ctx.moveTo(lastX, lastY);
 		ctx.lineTo(data.x, data.y);
@@ -83,27 +57,67 @@
 	}
 	
 	window.onload = function(){
-		socekt = io.connect(window.location.host);
-		canvas.addEventListener('mousemove',draw);
+		socket = io.connect(window.location.host);
+		canvas.addEventListener('mousemove',draw);		
 		canvas.addEventListener('mousedown',(e) => {
 			isDrawing = true;
 			[lastX, lastY] = [e.offsetX, e.offsetY];
-			socekt.emit('mouse',{
-				x: lastX,
-				y: lastY
+			socket.emit('mousedown',{
+				lastX: lastX,
+				lastY: lastY
 			});
 		});
 		canvas.addEventListener('mouseup',() => isDrawing = false);
 		canvas.addEventListener('mouseout',() => isDrawing = false);
-		pencilColor.addEventListener('change',updateCanvasSettings);
+		pencilColor.addEventListener('change', updateCanvasSettings);
 		pencilSize.addEventListener('change', updateCanvasSettings);
+		
 		clearBtn.addEventListener('click', function(){
 			if(isCanvasBlank(canvas)) return;
 			ctx.setTransform(1, 0, 0, 1, 0, 0);
 			ctx.clearRect(0,0, canvas.width, canvas.height);
 		});
-		socekt.on('mouse', function(data){
-			[lastX, lastY] = [data.x, data.y];			
+		canvas.addEventListener('mousemove',function(e){
+			if(isDrawing){
+				socket.emit('mousemove',{
+					x: e.offsetX,
+					y: e.offsetY,
+				});	
+			}
 		});
-		//socekt.on('mouse', newDraw);
-	};
+		socket.on('mousedown', function(data){
+			[lastX, lastY] = [data.lastX, data.lastY];
+		});
+		socket.on('mousemove', function(data){
+			newDraw(data);		
+		});
+	};	
+	}())
+
+	
+	
+	
+		
+	/*
+	function setFunky(ctx){
+		ctx.strokeStyle = `hsl(${hue},100%,50%)`;
+	}
+	function performFunky(ctx){
+		
+		hue++;
+		
+		if(hue >= 360){
+			hue = 0;
+		}
+		if(ctx.lineWidth >=100 || ctx.lineWidth <= 10){
+			direction = !direction;
+		}
+		if(direction){
+			ctx.lineWidth = ctx.lineWidth + 5;
+			ctx.lineWidth++;
+		}else{
+			ctx.lineWidth = ctx.lineWidth - 5;
+			ctx.lineWidth--;
+		}	
+	}
+	*/

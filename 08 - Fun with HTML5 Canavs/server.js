@@ -11,11 +11,14 @@ const io = socket(server);
 function newConnection(socket){
 	console.log(socket.id);
 	
-	socket.on('mouse', mouseMessage);
+	socket.on('mousemove', mouseMove);
+	socket.on('mousedown', mouseDown);
 	
-	function mouseMessage(data){
-		console.log(data);
-		socket.broadcast.emit('mouse', data);
+	function mouseMove(data){
+		socket.broadcast.emit('mousemove', data);
+	}
+	function mouseDown(data){
+		socket.broadcast.emit('mousedown', data);
 	}
 }
 io.sockets.on('connection', newConnection);
