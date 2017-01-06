@@ -1,8 +1,8 @@
 {
-  "name": "collabrative-drawing-app",
+  "name": "collaborative-drawing-app",
   "version": "1.0.0",
-  "description": "a collabrative painting app with socket.io",
-  "main": "index.js",
+  "description": "a collaborative painting app with socket.io",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
