@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Video Speed Scrubber</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="wrapper">
+    <video class="flex" width="765" height="430" src="https://archive.org/download/WebmVp8Vorbis/webmvp8_512kb.mp4" loop controls></video>
+    <div class="speed">
+      <div class="speed-bar">1×</div>
+    </div>
+  </div>
+
+<script>
+  const speed = document.querySelector('.speed');
+  const bar = document.querySelector('.speed-bar');
+  const video = document.querySelector('.flex');
+  let isMouseDown = false;
+  speed.addEventListener('mousedown', function(e){
+    isMouseDown = true;
+    updatePlayBackSpeed(e, this);
+  });
+  speed.addEventListener('mouseup', function(){
+    isMouseDown = false;
+  })
+  speed.addEventListener('mousemove', function(e){
+    updatePlayBackSpeed(e, this);
+  });
+
+  function updatePlayBackSpeed(e, element){
+    const y = e.pageY - element.offsetTop;
+    const percent = y / element.offsetHeight;
+    const min = 0.4;
+    const max = 4;
+    const height = Math.round(percent * 100) + '%';
+    const playbackRate = percent * (max - min) + min;
+    if(isMouseDown){
+      bar.style.height = height;
+      bar.textContent = playbackRate.toFixed(2) + 'x';
+      video.playbackRate = playbackRate;
+    }
+  }
+</script>
+</body>
+</html>
